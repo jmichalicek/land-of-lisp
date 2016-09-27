@@ -16,7 +16,7 @@
                                    (bucket living-room)
                                    (chain garden)
                                    (frog garden)))
-
+(defparameter *location* 'living-room)
 
 (defun describe-location (location nodes)
   (cadr (assoc location nodes)))
@@ -39,3 +39,13 @@
   (labels ((at-loc-p (obj)
                      (eq (cadr (assoc obj obj-locs)) loc)))
           (remove-if-not #'at-loc-p objs)))
+
+(defun describe-objects (loc objs obj-loc)
+  (labels ((describe-obj (obj)
+                         `(you see a ,obj on the floor.)))
+          (apply #'append (mapcar #'describe-obj (objects-at loc objs obj-loc)))))
+
+(defun look ()
+  (append (describe-location *location* *nodes*)
+          (describe-paths *location* *edges*)
+          (describe-objects *location* *objects* *object-locations*)))
